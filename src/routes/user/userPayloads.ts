@@ -1,5 +1,9 @@
 import { ValidatedPayload, StringKeyMap } from '../../types'
 
+export interface GetUserPayload {
+    auxpartyId: string
+}
+
 export interface UserLoginPayload {
     auxpartyId: string
     spotifyDisplayName: string
@@ -7,6 +11,19 @@ export interface UserLoginPayload {
     spotifyExternalLink: string
     spotifyAPILink: string
     spotifyUserId: string
+}
+
+export function parseGetUserPayload(data: StringKeyMap): ValidatedPayload<GetUserPayload> {
+    const auxpartyId = data?.auxpartyId
+
+    if (!auxpartyId) {
+        return { isValid: false, payloadError: 'auxparty assigned ID must exist' }
+    }
+
+    return {
+        isValid: true,
+        payload: { auxpartyId },
+    }
 }
 
 export function parseUserLoginPayload(data: StringKeyMap): ValidatedPayload<UserLoginPayload> {

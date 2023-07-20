@@ -6,7 +6,7 @@ export const errors = {
     FORBIDDEN: `Permission denied`,
     NO_FILE_PROVIDED: 'No file provided',
     INVALID_FILE_TYPE: 'Invalid file type',
-    SUPABASE_EROR: 'There is an error with Supabase',
+    SUPABASE_ERROR: 'There is an error with Supabase',
     UNKNOWN_ERROR: 'Unknown error',
     JOB_SCHEDULING_FAILED: 'Failed to schedule job',
     NAMESPACE_NOT_FOUND: 'Namespace not found',
