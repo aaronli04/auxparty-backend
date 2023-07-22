@@ -1,7 +1,7 @@
 import { ValidatedPayload, StringKeyMap } from '../../types'
 
 export interface GetRoomPayload {
-    auxpartyId: string
+    name: string
 }
 
 export interface CreateRoomPayload {
@@ -12,15 +12,15 @@ export interface CreateRoomPayload {
 }
 
 export function parseGetRoomPayload(data: StringKeyMap): ValidatedPayload<GetRoomPayload> {
-    const auxpartyId = data?.auxpartyId
+    const name = data?.name
 
-    if (!auxpartyId) {
-        return { isValid: false, payloadError: 'auxparty assigned ID must exist' }
+    if (!name) {
+        return { isValid: false, payloadError: 'Room name must exist' }
     }
 
     return {
         isValid: true,
-        payload: { auxpartyId },
+        payload: { name },
     }
 }
 

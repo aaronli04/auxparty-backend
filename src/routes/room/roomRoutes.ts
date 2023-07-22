@@ -14,13 +14,13 @@ app.post(paths.GET_ROOM, async (req, res) => {
         return res.status(codes.BAD_REQUEST).json({ error: payloadError || errors.INVALID_PAYLOAD })
     }
 
-    const { auxpartyId } = payload
+    const { name } = payload
 
     // Check if active room exists with given auxpartyId
     const { data, error } = await supabase
         .from('rooms')
         .select()
-        .eq('auxpartyId', auxpartyId)
+        .eq('name', name)
         .eq('active', true)
         .limit(1)
 
@@ -71,6 +71,26 @@ app.post(paths.CREATE_ROOM, async (req, res) => {
     const { data, error } = await supabase
         .from('rooms')
         .insert({ auxpartyId, name: roomName, password: roomPassword, active, created_at, modified_at })
+        .select()
+
+    if (error) {
+        console.log(error)
+        return res.status(codes.BAD_REQUEST).json({ error: errors.SUPABASE_ERROR })
+    }
+
+    return res
+        .status(codes.SUCCESS)
+        .json({
+            data: data,
+        })
+})
+
+/**
+ * Get all rooms route
+ */
+app.get(paths.GET_ALL_ROOMS, async (req, res) => {
+    const { data, error } = await supabase
+        .from('rooms')
         .select()
 
     if (error) {
