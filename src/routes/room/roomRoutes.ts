@@ -1,26 +1,59 @@
 import { app } from '../express'
 import paths from '../../utils/paths'
-import { parseGetRoomPayload, parseCreateRoomPayload } from './roomPayloads'
+import { parseGetRoomByNamePayload, parseCreateRoomPayload, parseGetRoomByAuxpartyIdPayload } from './roomPayloads'
 import { codes, errors } from '../../utils/requests'
 import supabase from '../../supabase/client'
 
 /**
- * Get room route
+ * Get room by name route
  */
-app.post(paths.GET_ROOM, async (req, res) => {
+app.post(paths.GET_ROOM_BY_NAME, async (req, res) => {
     // Parse & validate payload.
-    const { payload, isValid, payloadError } = parseGetRoomPayload(req.body)
+    const { payload, isValid, payloadError } = parseGetRoomByNamePayload(req.body)
     if (!isValid) {
         return res.status(codes.BAD_REQUEST).json({ error: payloadError || errors.INVALID_PAYLOAD })
     }
 
     const { name } = payload
 
-    // Check if active room exists with given auxpartyId
+    // Check if active room exists with given name
     const { data, error } = await supabase
         .from('rooms')
         .select()
         .eq('name', name)
+        .eq('active', true)
+        .limit(1)
+
+    if (error) {
+        console.log(error)
+        return res.status(codes.BAD_REQUEST).json({ error: errors.SUPABASE_ERROR })
+    }
+
+    return res
+        .status(codes.SUCCESS)
+        .json({
+            data: data,
+        })
+})
+
+/**
+ * Get room by auxpartyId route
+ */
+app.post(paths.GET_ROOM_BY_AUXPARTYID, async (req, res) => {
+    // Parse & validate payload.
+    const { payload, isValid, payloadError } = parseGetRoomByAuxpartyIdPayload(req.body)
+
+    if (!isValid) {
+        return res.status(codes.BAD_REQUEST).json({ error: payloadError || errors.INVALID_PAYLOAD })
+    }
+
+    const { auxpartyId } = payload
+
+    // Check if active room exists with given auxpartyId
+    const { data, error } = await supabase
+        .from('rooms')
+        .select()
+        .eq('auxpartyId', auxpartyId)
         .eq('active', true)
         .limit(1)
 
