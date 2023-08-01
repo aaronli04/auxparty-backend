@@ -3,29 +3,28 @@ import { addUserToRoom } from '../shared/rooms/addUserToRoom';
 
 export function setupSocket(server) {
     const io = new Server(server, {
-      path: '/socket.io',
-      serveClient: false,
-      cors: {
-        origin: process.env.FRONTEND_URL,
-        methods: ['GET', 'POST'],
-        credentials: true,
-      },
+        path: '/socket.io',
+        serveClient: false,
+        cors: {
+            origin: process.env.FRONTEND_URL,
+            methods: ['GET', 'POST'],
+            credentials: true,
+        },
     });
-  
-    io.on("connection", (socket) => {
-      socket.on('join-room', (user, room) => {
-        socket.join(room)
-        console.log(`${user} joined ${room}`)
-        addUserToRoom(user, room)
-      })
 
-      socket.on('disconnect', () => {
-        const rooms = Object.keys(socket.rooms);
-        rooms.shift();
-        rooms.forEach(room => {
-          socket.leave(room);
-          console.log(`${socket.id} left room ${room}`);
+    io.on("connection", (socket) => {
+        socket.on('join-room', async (user, room) => {
+            if (!room || !user) { return; }
+            socket.join(room)
+            await addUserToRoom(user, room);
+        })
+
+        socket.on('add-song', (room, song) => {
+            socket.join(room)
+            io.to(room).emit('song-added', { user: socket.id, song });
         });
-      });
+
+        socket.on('disconnect', () => {
+        });
     });
 }

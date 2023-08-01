@@ -14,7 +14,6 @@ export async function addUserToRoom(userId, roomId) {
   }
 
   let membersArray = roomData[0].members ? roomData[0].members : [];
-  console.log(membersArray)
 
   if (!membersArray.includes(userId)) {
     membersArray.push(userId);
