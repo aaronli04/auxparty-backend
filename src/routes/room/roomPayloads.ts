@@ -12,7 +12,6 @@ export interface CreateRoomPayload {
     auxpartyId: string
     roomName: string
     roomPassword: string
-    active: boolean
 }
 
 export function parseGetRoomByNamePayload(data: StringKeyMap): ValidatedPayload<GetRoomByNamePayload> {
@@ -45,18 +44,17 @@ export function parseCreateRoomPayload(data: StringKeyMap): ValidatedPayload<Cre
     const auxpartyId = data?.auxpartyId
     const roomName = data?.roomName
     const roomPassword = data?.roomPassword
-    const active = data?.active
 
     if (!auxpartyId) {
         return { isValid: false, payloadError: 'Owner must have auxparty assigned ID' }
     }
 
-    if (!roomName || !roomPassword || !active) {
+    if (!roomName || !roomPassword ) {
         return { isValid: false, payloadError: 'Room information is incomplete or missing' }
     }
 
     return {
         isValid: true,
-        payload: { auxpartyId, roomName, roomPassword, active },
+        payload: { auxpartyId, roomName, roomPassword },
     }
 }

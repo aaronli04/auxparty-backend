@@ -2,7 +2,8 @@ import { app } from '../express'
 import paths from '../../utils/paths'
 import { parseGetUserPayload, parseUserLoginPayload } from './userPayloads'
 import { codes, errors } from '../../utils/requests'
-import supabase from '../../supabase/client'
+import { getUserByAuxpartyId } from '../../shared/user/getUserByAuxpartyId'
+import { handleSpotifyLogin } from '../../shared/user/handleSpotifyLogin'
 
 /**
  * Get user route
@@ -14,24 +15,11 @@ app.post(paths.GET_USER, async (req, res) => {
         return res.status(codes.BAD_REQUEST).json({ error: payloadError || errors.INVALID_PAYLOAD })
     }
 
-    const { auxpartyId } = payload
-
-    const { data, error } = await supabase
-        .from('users')
-        .select()
-        .eq('auxpartyId', auxpartyId)
-        .limit(1)
-
-    if (error) {
-        console.log(error)
-        return res.status(codes.BAD_REQUEST).json({ error: errors.SUPABASE_ERROR })
-    }
+    const data = await getUserByAuxpartyId(payload.auxpartyId)
 
     return res
         .status(codes.SUCCESS)
-        .json({
-            data: data,
-        })
+        .json({ data })
 })
 
 /**
@@ -44,22 +32,9 @@ app.post(paths.SPOTIFY_LOGIN, async (req, res) => {
         return res.status(codes.BAD_REQUEST).json({ error: payloadError || errors.INVALID_PAYLOAD })
     }
 
-    // Upsert user
-    const { data, error } = await supabase
-        .from('users')
-        .upsert(payload, {
-            onConflict: 'auxpartyId'
-        })
-        .select()
-
-    if (error) {
-        console.log(error)
-        return res.status(codes.BAD_REQUEST).json({ error: errors.SUPABASE_ERROR })
-    }
+    const data = await handleSpotifyLogin(payload)
 
     return res
         .status(codes.SUCCESS)
-        .json({
-            data: data,
-        })
+        .json({ data })
 })

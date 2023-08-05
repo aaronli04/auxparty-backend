@@ -14,8 +14,7 @@ export function setupSocket(server) {
 
     io.on("connection", (socket) => {
         socket.on('join-room', async (user, room) => {
-            if (!room || !user) { return; }
-            socket.join(room)
+            socket.join(room);
             await addUserToRoom(user, room);
         })
 

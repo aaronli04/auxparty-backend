@@ -1,6 +1,6 @@
 import supabase from "../../supabase/client";
 
-export async function addUserToRoom(userId, roomId) {
+export async function addUserToRoom(userId: string, roomId: string) {
   if (!userId || !roomId) { return; }
 
   const { data: roomData, error } = await supabase
