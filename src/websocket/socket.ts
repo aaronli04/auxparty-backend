@@ -13,6 +13,10 @@ export function setupSocket(server) {
     });
 
     io.on("connection", (socket) => {
+        socket.on('ping', () => {
+            socket.emit('pong');
+        })
+
         socket.on('join-room', async (user, room) => {
             socket.join(room);
             await addUserToRoom(user, room);
