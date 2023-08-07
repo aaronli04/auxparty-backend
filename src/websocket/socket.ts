@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import { addUserToRoom } from '../shared/rooms/addUserToRoom';
 import { updateAccessToken } from '../shared/user/updateAccessToken';
+import { deleteRoomByAuxpartyId } from '../shared/rooms/deleteRoomByAuxpartyId';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -32,6 +33,12 @@ export function setupSocket(server) {
             socket.join(auxpartyId)
             const updatedToken = (await updateAccessToken({ auxpartyId, accessToken })).accessToken
             io.to(auxpartyId).emit('access-token-updated', { updatedToken })
+        })
+
+        socket.on('deleteRoom', async (auxpartyId) => {
+            socket.join(auxpartyId)
+            await deleteRoomByAuxpartyId(auxpartyId)
+            io.to(auxpartyId).emit('room-deleted')
         })
 
         socket.on('disconnect', () => {
