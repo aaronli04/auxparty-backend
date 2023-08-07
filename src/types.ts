@@ -25,6 +25,6 @@ export interface User {
     spotifyExternalLink: string;
     spotifyApiLink: string;
     spotifyUserId: string;
-    refresh_token: string;
-    access_token: string;
+    refreshToken: string;
+    accessToken: string;
 }
