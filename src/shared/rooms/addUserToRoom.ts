@@ -7,13 +7,14 @@ export async function addUserToRoom(userId: string, roomId: string) {
     .from('rooms')
     .select()
     .eq('auxpartyId', roomId)
+    .limit(1)
 
   if (error) {
     console.error("Error fetching room data:", error.message);
     return;
   }
 
-  let membersArray = roomData[0].members ? roomData[0].members : [];
+  let membersArray = roomData[0].members ? JSON.parse(roomData[0].members) : [];
 
   if (!membersArray.includes(userId)) {
     membersArray.push(userId);
