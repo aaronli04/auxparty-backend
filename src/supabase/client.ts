@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-require('dotenv').config();
 
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
     throw new Error('Missing env vars')

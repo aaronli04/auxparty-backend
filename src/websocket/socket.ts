@@ -2,7 +2,6 @@ import { Server } from 'socket.io';
 import { addUserToRoom } from '../shared/rooms/addUserToRoom';
 import { updateAccessToken } from '../shared/user/updateAccessToken';
 import { deleteRoomByAuxpartyId } from '../shared/rooms/deleteRoomByAuxpartyId';
-require('dotenv').config();
 
 export function setupSocket(server) {
     const io = new Server(server, {
