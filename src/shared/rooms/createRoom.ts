@@ -3,7 +3,7 @@ import { Room, StringKeyMap } from "../../types";
 import { getRoomByName } from "./getRoomByName";
 
 export async function createRoom(payload: StringKeyMap): Promise<Room | null> {
-    const { auxpartyId, roomName, roomPassword } = payload
+    const { auxpartyId, roomName, roomPassword, playlistId } = payload
     const created_at = new Date();
     const modified_at = new Date();
 
@@ -27,7 +27,7 @@ export async function createRoom(payload: StringKeyMap): Promise<Room | null> {
     // Create room
     const { data, error } = await supabase
         .from('rooms')
-        .insert({ auxpartyId, name: roomName, password: roomPassword, created_at, modified_at })
+        .insert({ auxpartyId, name: roomName, password: roomPassword, playlistId, created_at, modified_at })
         .select()
 
     if (error || data.length === 0) { return null }

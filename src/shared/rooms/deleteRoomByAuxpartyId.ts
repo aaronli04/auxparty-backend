@@ -6,5 +6,7 @@ export async function deleteRoomByAuxpartyId(auxpartyId: string) {
         .delete()
         .eq('auxpartyId', auxpartyId)
 
-    console.log(error)
+    if (error) {
+        return
+    }
 }

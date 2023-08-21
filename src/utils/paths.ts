@@ -7,7 +7,7 @@ const prefix = {
 const paths = {
     HEALTH_CHECK: '/health-check',
     SPOTIFY_LOGIN: `${prefix.SPOTIFY}/login`,
-    SPOTIFY_UPDATE: `${prefix.SPOTIFY}/update`,
+    UPDATE_ACCESS_TOKEN: `${prefix.USER}/update/token`,
     GET_USER: `${prefix.USER}/get`,
     GET_ROOM_BY_NAME: `${prefix.ROOM}/get/name`,
     GET_ROOM_BY_AUXPARTYID: `${prefix.ROOM}/get/id`,

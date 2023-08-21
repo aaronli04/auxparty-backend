@@ -43,13 +43,12 @@ app.post(paths.SPOTIFY_LOGIN, async (req, res) => {
 /**
  * Update Spotify Access Token route
  */
-app.post(paths.SPOTIFY_UPDATE, async (req, res) => {
+app.post(paths.UPDATE_ACCESS_TOKEN, async (req, res) => {
     // Parse & validate payload.
     const { payload, isValid, payloadError } = parseUpdateAccessTokenPayload(req.body)
     if (!isValid) {
         return res.status(codes.BAD_REQUEST).json({ error: payloadError || errors.INVALID_PAYLOAD })
     }
-
     const data = await updateAccessToken(payload)
 
     return res
