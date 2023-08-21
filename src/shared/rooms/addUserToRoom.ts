@@ -10,27 +10,27 @@ export async function addUserToRoom(userId: string, roomId: string) {
     .limit(1)
 
   if (error) {
-    console.error("Error fetching room data:", error.message);
-    return;
+    console.error("Error fetching room data:", error.message)
+    return
   }
 
-  let membersArray = roomData[0].members ? JSON.parse(roomData[0].members) : [];
+  let membersArray = roomData[0].members ? JSON.parse(roomData[0].members) : []
 
   if (!membersArray.includes(userId)) {
-    membersArray.push(userId);
+    membersArray.push(userId)
 
     const { data: updatedData, error: updateError } = await supabase
       .from('rooms')
       .update({ members: membersArray })
-      .match({ auxpartyId: roomId });
+      .match({ auxpartyId: roomId })
 
     if (updateError) {
-      console.error("Error updating users array:", updateError.message);
-      return;
+      console.error("Error updating users array:", updateError.message)
+      return
     }
   }
 
-  return membersArray;
+  return membersArray
 }
 
 

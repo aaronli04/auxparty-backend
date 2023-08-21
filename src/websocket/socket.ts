@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import { addUserToRoom } from '../shared/rooms/addUserToRoom';
 import { updateAccessToken } from '../shared/user/updateAccessToken';
 import { deleteRoomByAuxpartyId } from '../shared/rooms/deleteRoomByAuxpartyId';
+import { addSongToRoom } from '../shared/rooms/addSongToRoom';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -19,26 +20,27 @@ export function setupSocket(server) {
             socket.emit('pong');
         })
 
-        socket.on('join-room', async (user, room) => {
+        socket.on('joinRoom', async (user, room) => {
             socket.join(room);
             await addUserToRoom(user, room);
         })
 
-        socket.on('add-song', (room, song) => {
+        socket.on('addSong', async (room, song) => {
             socket.join(room)
-            io.to(room).emit('song-added', { user: socket.id, song });
+            await addSongToRoom(room, song)
+            io.to(room).emit('songAdded', song)
         });
 
         socket.on('updateAccessToken', async (auxpartyId, accessToken) => {
             socket.join(auxpartyId)
             const updatedToken = (await updateAccessToken({ auxpartyId, accessToken })).accessToken
-            io.to(auxpartyId).emit('access-token-updated', { updatedToken })
+            io.to(auxpartyId).emit('accessTokenUpdated', { updatedToken })
         })
 
         socket.on('deleteRoom', async (auxpartyId) => {
             socket.join(auxpartyId)
             await deleteRoomByAuxpartyId(auxpartyId)
-            io.to(auxpartyId).emit('room-deleted')
+            io.to(auxpartyId).emit('roomDeleted')
         })
 
         socket.on('disconnect', () => {
