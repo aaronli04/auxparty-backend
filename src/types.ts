@@ -29,3 +29,11 @@ export interface User {
     refreshToken: string;
     accessToken: string;
 }
+
+export interface Vote {
+    id: string;
+    userId: string;
+    voteValue: string;
+    created_at: DateConstructor;
+    modified_at: DateConstructor;
+}

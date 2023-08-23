@@ -1,7 +1,8 @@
 const prefix = {
     SPOTIFY: '/spotify',
     USER: '/user',
-    ROOM: '/room'
+    ROOM: '/room',
+    VOTE: '/vote',
 }
 
 const paths = {
@@ -12,7 +13,9 @@ const paths = {
     GET_ROOM_BY_NAME: `${prefix.ROOM}/get/name`,
     GET_ROOM_BY_AUXPARTYID: `${prefix.ROOM}/get/id`,
     GET_ALL_ROOMS: `${prefix.ROOM}/get/all`,
-    CREATE_ROOM: `${prefix.ROOM}/create`
+    CREATE_ROOM: `${prefix.ROOM}/create`,
+    ADD_VOTE: `${prefix.VOTE}/add`,
+    GET_VOTE: `${prefix.VOTE}/get`
 }
 
 export default paths

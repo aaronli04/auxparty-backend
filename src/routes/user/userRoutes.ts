@@ -1,7 +1,7 @@
 import { app } from '../express'
 import paths from '../../utils/paths'
-import { parseGetUserPayload, parseUserLoginPayload, parseUpdateAccessTokenPayload } from './userPayloads'
 import { codes, errors } from '../../utils/requests'
+import { parseGetUserPayload, parseUserLoginPayload, parseUpdateAccessTokenPayload } from './userPayloads'
 import { getUserByAuxpartyId } from '../../shared/user/getUserByAuxpartyId'
 import { handleSpotifyLogin } from '../../shared/user/handleSpotifyLogin'
 import { updateAccessToken } from '../../shared/user/updateAccessToken'
