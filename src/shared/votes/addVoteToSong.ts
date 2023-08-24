@@ -5,7 +5,7 @@ export async function addVoteToSong(payload: StringKeyMap): Promise<Vote | null>
     const { data, error } = await supabase
         .from('votes')
         .upsert(payload, {
-            onConflict: 'auxpartyId'
+            onConflict: 'auxpartyId, userId'
         })
         .select()
 
