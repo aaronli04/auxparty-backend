@@ -1,6 +1,7 @@
 import supabase from "../../supabase/client";
+import { StringKeyMap } from "../../types";
 
-export async function addSongToRoom(roomId: string, song: string) {
+export async function addSongToRoom(roomId: string, song: StringKeyMap) {
     if (!roomId || !song) { return }
 
     const { data: roomData, error } = await supabase
@@ -16,7 +17,7 @@ export async function addSongToRoom(roomId: string, song: string) {
 
     let songArray = roomData[0].queue ? JSON.parse(roomData[0].queue) : []
 
-    songArray.push(song);
+    songArray.push(song.auxpartyId);
 
     const { data: updatedData, error: updateError } = await supabase
         .from('rooms')

@@ -5,6 +5,7 @@ import { deleteRoomByAuxpartyId } from '../shared/rooms/deleteRoomByAuxpartyId';
 import { addSongToRoom } from '../shared/rooms/addSongToRoom';
 import { addVoteToSong } from '../shared/votes/addVoteToSong';
 import { getVotesBySong } from '../shared/votes/getVotesBySong';
+import { addSongToSongs } from '../shared/songs/addSongToSongs';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -30,6 +31,7 @@ export function setupSocket(server) {
         socket.on('addSong', async (room, song) => {
             socket.join(room)
             await addSongToRoom(room, song)
+            await addSongToSongs(room, song)
             io.to(room).emit('songAdded', song)
         });
 

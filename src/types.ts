@@ -31,9 +31,13 @@ export interface User {
 }
 
 export interface Vote {
-    id: string;
+    auxpartyId: string;
     userId: string;
     voteValue: string;
     created_at: DateConstructor;
     modified_at: DateConstructor;
+}
+
+export interface Song {
+
 }
