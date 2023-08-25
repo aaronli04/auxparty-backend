@@ -17,7 +17,6 @@ export async function addSongToSongs(roomId: string, song: StringKeyMap) {
         .select()
     
     if (error || data.length == 0) {
-        console.log(error)
         return
     }
 

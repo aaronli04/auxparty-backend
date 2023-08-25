@@ -15,6 +15,7 @@ export interface Room {
     members: string;
     queue: string;
     playlistId: string;
+    uri: string;
     created_at: DateConstructor;
     modified_at: DateConstructor;
 }

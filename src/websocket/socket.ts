@@ -6,6 +6,7 @@ import { addSongToRoom } from '../shared/rooms/addSongToRoom';
 import { addVoteToSong } from '../shared/votes/addVoteToSong';
 import { getVotesBySong } from '../shared/votes/getVotesBySong';
 import { addSongToSongs } from '../shared/songs/addSongToSongs';
+import { getSongByAuxpartyId } from '../shared/songs/getSongByAuxpartyId';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -51,7 +52,12 @@ export function setupSocket(server) {
             socket.join(roomId)
             const recentVote = await addVoteToSong({auxpartyId: songId, userId, voteValue})
             const voteCount = (await getVotesBySong(songId)) + recentVote.voteValue
-            io.to(roomId).emit('voteAdded', { songId, voteCount })
+            const song = await getSongByAuxpartyId(songId)
+            const completeSong = {
+                ...song,
+                voteCount
+            }
+            io.to(roomId).emit('voteAdded', completeSong)
         })
 
         socket.on('disconnect', () => {

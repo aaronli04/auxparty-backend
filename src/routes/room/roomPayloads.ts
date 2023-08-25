@@ -13,6 +13,7 @@ export interface CreateRoomPayload {
     roomName: string
     roomPassword: string
     playlistId: string
+    uri: string
 }
 
 export function parseGetRoomByNamePayload(data: StringKeyMap): ValidatedPayload<GetRoomByNamePayload> {
@@ -46,17 +47,18 @@ export function parseCreateRoomPayload(data: StringKeyMap): ValidatedPayload<Cre
     const roomName = data?.roomName
     const roomPassword = data?.roomPassword
     const playlistId = data?.playlistId
+    const uri = data?.uri
 
     if (!auxpartyId) {
         return { isValid: false, payloadError: 'Owner must have auxparty assigned ID' }
     }
 
-    if (!roomName || !roomPassword || !playlistId) {
+    if (!roomName || !roomPassword || !playlistId || !uri) {
         return { isValid: false, payloadError: 'Room information is incomplete or missing' }
     }
 
     return {
         isValid: true,
-        payload: { auxpartyId, roomName, roomPassword, playlistId },
+        payload: { auxpartyId, roomName, roomPassword, playlistId, uri },
     }
 }
