@@ -16,6 +16,11 @@ export interface CreateRoomPayload {
     uri: string
 }
 
+export interface UpdateActiveStatusPayload {
+    auxpartyId: string
+    active: boolean
+}
+
 export function parseGetRoomByNamePayload(data: StringKeyMap): ValidatedPayload<GetRoomByNamePayload> {
     const name = data?.name
 
@@ -60,5 +65,23 @@ export function parseCreateRoomPayload(data: StringKeyMap): ValidatedPayload<Cre
     return {
         isValid: true,
         payload: { auxpartyId, roomName, roomPassword, playlistId, uri },
+    }
+}
+
+export function parseUpdateActiveStatusPayload(data: StringKeyMap): ValidatedPayload<UpdateActiveStatusPayload> {
+    const auxpartyId = data?.auxpartyId
+    const active = data?.active
+
+    if (!auxpartyId) {
+        return { isValid: false, payloadError: 'Owner must have auxparty assigned ID' }
+    }
+
+    if (!active) {
+        return { isValid: false, payloadError: 'Activity information is incomplete or missing' }
+    }
+
+    return {
+        isValid: true,
+        payload: { auxpartyId, active },
     }
 }

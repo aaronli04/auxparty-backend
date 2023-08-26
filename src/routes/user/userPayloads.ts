@@ -13,6 +13,7 @@ export interface UserLoginPayload {
     spotifyUserId: string
     refreshToken: string
     accessToken: string
+    deviceId: string
 }
 
 export interface UpdateAccessTokenPayload {
@@ -42,18 +43,19 @@ export function parseUserLoginPayload(data: StringKeyMap): ValidatedPayload<User
     const spotifyUserId = data?.spotifyUserId
     const refreshToken = data?.refresh_token
     const accessToken = data?.access_token
+    const deviceId = data?.deviceId
 
     if (!auxpartyId) {
         return { isValid: false, payloadError: 'User must have auxparty assigned ID' }
     }
 
-    if (!spotifyDisplayName || !spotifyEmail || !spotifyExternalLink || !spotifyApiLink || !spotifyUserId || !refreshToken || !accessToken) {
+    if (!spotifyDisplayName || !spotifyEmail || !spotifyExternalLink || !spotifyApiLink || !spotifyUserId || !refreshToken || !accessToken || !deviceId) {
         return { isValid: false, payloadError: 'Spotify information is incomplete or missing' }
     }
 
     return {
         isValid: true,
-        payload: { auxpartyId, spotifyDisplayName, spotifyEmail, spotifyExternalLink, spotifyApiLink, spotifyUserId, refreshToken, accessToken }
+        payload: { auxpartyId, spotifyDisplayName, spotifyEmail, spotifyExternalLink, spotifyApiLink, spotifyUserId, refreshToken, accessToken, deviceId }
     }
 }
 

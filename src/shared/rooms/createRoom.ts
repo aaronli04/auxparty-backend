@@ -27,7 +27,7 @@ export async function createRoom(payload: StringKeyMap): Promise<Room | null> {
     // Create room
     const { data, error } = await supabase
         .from('rooms')
-        .insert({ auxpartyId, name: roomName, password: roomPassword, playlistId, uri, created_at, modified_at })
+        .insert({ auxpartyId, name: roomName, password: roomPassword, playlistId, uri, active: false, created_at, modified_at })
         .select()
 
     if (error || data.length === 0) { return null }
