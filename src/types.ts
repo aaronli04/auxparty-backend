@@ -40,5 +40,13 @@ export interface Vote {
 }
 
 export interface Song {
-
+    auxpartyId: string;
+    roomId: string;
+    albumCover: string;
+    name: string;
+    artists: string;
+    uri: string;
+    added: boolean;
+    created_at: DateConstructor;
+    modified_at: DateConstructor;
 }

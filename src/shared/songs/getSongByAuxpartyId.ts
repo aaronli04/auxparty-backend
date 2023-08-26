@@ -9,5 +9,5 @@ export async function getSongByAuxpartyId(auxpartyId: string): Promise<Song | nu
         .limit(1)
 
     if (error || data.length === 0) { return null }
-    return data[0];
+    return data[0]
 }

@@ -6,7 +6,7 @@ export async function addSongToSongs(roomId: string, song: StringKeyMap) {
 
     const payload = {
         ...song,
-        roomId
+        roomId,
     } 
 
     const { data, error } = await supabase
