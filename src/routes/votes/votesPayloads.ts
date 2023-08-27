@@ -10,6 +10,11 @@ export interface GetVotesBySongPayload {
     auxpartyId: string;
 }
 
+export interface GetUserVoteBySongPayload {
+    auxpartyId: string;
+    userId: string;
+}
+
 export function parseAddVotePayload(data: StringKeyMap): ValidatedPayload<AddVotePayload> {
     const auxpartyId = data?.auxpartyId
     const userId = data?.userId
@@ -39,5 +44,19 @@ export function parseGetVotesBySongPayload(data: StringKeyMap): ValidatedPayload
     return {
         isValid: true,
         payload: { auxpartyId },
+    }
+}
+
+export function parseGetUserVoteBySongPayload(data: StringKeyMap): ValidatedPayload<GetUserVoteBySongPayload> {
+    const auxpartyId = data?.auxpartyId
+    const userId = data?.userId
+
+    if (!auxpartyId) {
+        return { isValid: false, payloadError: 'auxparty assigned ID must exist' }
+    }
+
+    return {
+        isValid: true,
+        payload: { auxpartyId, userId },
     }
 }

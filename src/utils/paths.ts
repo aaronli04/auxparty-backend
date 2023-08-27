@@ -17,7 +17,9 @@ const paths = {
     CREATE_ROOM: `${prefix.ROOM}/create`,
     ADD_VOTE: `${prefix.VOTE}/add`,
     GET_VOTE: `${prefix.VOTE}/get`,
-    GET_SONG: `${prefix.SONG}/get`
+    GET_SONG: `${prefix.SONG}/get`,
+    UPDATE_ROOM_ACTIVE: `${prefix.ROOM}/update/status`,
+    GET_USER_VOTE: `${prefix.VOTE}/get/user`
 }
 
 export default paths
