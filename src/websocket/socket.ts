@@ -8,6 +8,9 @@ import { getVotesBySong } from '../shared/votes/getVotesBySong';
 import { addSongToSongs } from '../shared/songs/addSongToSongs';
 import { getSongByAuxpartyId } from '../shared/songs/getSongByAuxpartyId';
 import { setCurrentlyPlaying } from '../shared/rooms/setCurrentlyPlaying';
+import { getAllSongsInRoom } from '../shared/songs/getAllSongsInRoom';
+import { deleteAllSongsInRoom } from '../shared/songs/deleteAllSongsInRoom';
+import { deleteAllVotesOfSong } from '../shared/votes/deleteAllVotesOfSong';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -18,16 +21,16 @@ export function setupSocket(server) {
             methods: ['GET', 'POST'],
             credentials: true,
         },
-    });
+    })
 
     io.on("connection", (socket) => {
         socket.on('ping', () => {
-            socket.emit('pong');
+            socket.emit('pong')
         })
 
         socket.on('joinRoom', async (user, room) => {
-            socket.join(room);
-            await addUserToRoom(user, room);
+            socket.join(room)
+            await addUserToRoom(user, room)
         })
 
         socket.on('addSong', async (room, song) => {
@@ -45,6 +48,11 @@ export function setupSocket(server) {
 
         socket.on('deleteRoom', async (auxpartyId) => {
             socket.join(auxpartyId)
+            const songs = await getAllSongsInRoom(auxpartyId)
+            for (let i = 0; i < songs.length; ++i) {
+                await deleteAllVotesOfSong(songs[i])
+            }
+            await deleteAllSongsInRoom(auxpartyId)
             await deleteRoomByAuxpartyId(auxpartyId)
             io.to(auxpartyId).emit('roomDeleted')
         })
