@@ -16,6 +16,7 @@ export interface Room {
     queue: string;
     playlistId: string;
     uri: string;
+    currentlyPlaying: string;
     created_at: DateConstructor;
     modified_at: DateConstructor;
 }

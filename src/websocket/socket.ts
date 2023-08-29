@@ -7,6 +7,7 @@ import { addVoteToSong } from '../shared/votes/addVoteToSong';
 import { getVotesBySong } from '../shared/votes/getVotesBySong';
 import { addSongToSongs } from '../shared/songs/addSongToSongs';
 import { getSongByAuxpartyId } from '../shared/songs/getSongByAuxpartyId';
+import { setCurrentlyPlaying } from '../shared/rooms/setCurrentlyPlaying';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -58,6 +59,12 @@ export function setupSocket(server) {
                 voteCount
             }
             io.to(roomId).emit('voteAdded', completeSong)
+        })
+
+        socket.on('setCurrentlyPlaying', async (roomId, currentlyPlaying) => {
+            socket.join(roomId)
+            const response = await setCurrentlyPlaying({auxpartyId: roomId, currentlyPlaying})
+            io.to(roomId).emit('currentlyPlayingSet', currentlyPlaying)
         })
 
         socket.on('disconnect', () => {
