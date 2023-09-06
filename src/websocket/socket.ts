@@ -35,8 +35,8 @@ export function setupSocket(server) {
 
         socket.on('addSong', async (room, song) => {
             socket.join(room)
-            await addSongToRoom(room, song)
             await addSongToSongs(room, song)
+            await addSongToRoom(room, song)
             io.to(room).emit('songAdded', song)
         });
 
