@@ -1,8 +1,9 @@
-import { getSongByAuxpartyId } from "../shared/songs/getSongByAuxpartyId";
-import { getVotesBySong } from "../shared/votes/getVotesBySong";
-import { StringKeyMap } from "../types";
+import { getSongByAuxpartyId } from "../../shared/songs/getSongByAuxpartyId";
+import { getVotesBySong } from "../../shared/votes/getVotesBySong";
+import { StringKeyMap } from "../../types";
 
 export async function sortQueue(songArray: string[], currentlyPlaying: number): Promise<StringKeyMap[]> {
+    console.log(currentlyPlaying)
     const songsArray = []
     
     for (const song of songArray) {
@@ -26,7 +27,6 @@ export async function sortQueue(songArray: string[], currentlyPlaying: number): 
     const songsAfter = songsArray.slice(currentlyPlaying + 1)
     const sortedSongsAfter = songsAfter.slice().sort((a, b) => b.voteCount - a.voteCount)
     const finalSongs = songsBefore.concat(sortedSongsAfter)
-    const updatedArray = finalSongs.map((song) => song.auxpartyId)
 
-    return updatedArray
+    return finalSongs
 }

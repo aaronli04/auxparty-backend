@@ -1,6 +1,6 @@
 import supabase from "../../supabase/client";
 import { StringKeyMap } from "../../types";
-import { sortQueue } from "../../utils/sortSongs";
+import { sortQueue } from "../../utils/helpers/sortQueue";
 
 export async function addSongToRoom(roomId: string, song: StringKeyMap) {
     if (!roomId || !song) { return }
@@ -21,13 +21,20 @@ export async function addSongToRoom(roomId: string, song: StringKeyMap) {
     const currentlyPlaying = roomData[0].currentlyPlaying ? JSON.parse(roomData[0].currentlyPlaying): 0
     const updatedArray = await sortQueue(songArray, currentlyPlaying)
 
+    let songIds = []
+    for (const completeSong of updatedArray) {
+        songIds.push(completeSong.auxpartyId)
+    }
+
     const { data: updatedData, error: updateError } = await supabase
         .from('rooms')
-        .update({ queue: updatedArray })
+        .update({ queue: songIds })
         .match({ auxpartyId: roomId })
 
     if (updateError) {
         console.error("Error updating songs array:", updateError.message)
         return
     }
+
+    return updatedArray
 }

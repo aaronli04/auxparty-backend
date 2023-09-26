@@ -11,6 +11,8 @@ import { setCurrentlyPlaying } from '../shared/rooms/setCurrentlyPlaying';
 import { getAllSongsInRoom } from '../shared/songs/getAllSongsInRoom';
 import { deleteAllSongsInRoom } from '../shared/songs/deleteAllSongsInRoom';
 import { deleteAllVotesOfSong } from '../shared/votes/deleteAllVotesOfSong';
+import { sortQueue } from '../utils/helpers/sortQueue';
+import { getRoomByAuxpartyId } from '../shared/rooms/getRoomByAuxpartyId';
 
 export function setupSocket(server) {
     const io = new Server(server, {
@@ -36,8 +38,8 @@ export function setupSocket(server) {
         socket.on('addSong', async (room, song) => {
             socket.join(room)
             await addSongToSongs(room, song)
-            await addSongToRoom(room, song)
-            io.to(room).emit('songAdded', song)
+            const songs = await addSongToRoom(room, song)
+            io.to(room).emit('songAdded', songs)
         });
 
         socket.on('updateAccessToken', async (auxpartyId, accessToken) => {
@@ -59,14 +61,11 @@ export function setupSocket(server) {
 
         socket.on('addVote', async (roomId, songId, userId, voteValue) => {
             socket.join(roomId)
+            const currentRoom = await getRoomByAuxpartyId(roomId)
             const recentVote = await addVoteToSong({auxpartyId: songId, userId, voteValue})
-            const voteCount = (await getVotesBySong(songId)) + recentVote.voteValue
-            const song = await getSongByAuxpartyId(songId)
-            const completeSong = {
-                ...song,
-                voteCount
-            }
-            io.to(roomId).emit('voteAdded', completeSong)
+            const songIds = await getAllSongsInRoom(roomId)
+            const newQueue = await sortQueue(songIds, currentRoom.currentlyPlaying)
+            io.to(roomId).emit('voteAdded', newQueue)
         })
 
         socket.on('setCurrentlyPlaying', async (roomId, currentlyPlaying) => {
